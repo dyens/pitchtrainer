@@ -97,24 +97,49 @@ class Player(object):
         '''
         Only CDEFGAB
         '''
-
         self.table_music = {}
         for i in self.table_files:
             if self.table_files[i][0] not in [1,3,6,8,10]:
                 self.table_music[i] = self.table_files[i]
 
-    def play(self):
+    def test3(self):
+        '''
+        Only CDEFGAB
+        '''
+        self.table_music = {}
+        for i in self.table_files:
+            self.table_music[i] = self.table_files[i]
+
+    def test4(self):
+        '''
+        Only one note
+        '''
+        self.table_music = {}
+        for i in self.table_files:
+            if self.table_files[i][0]  in [0,2]:
+                self.table_music[i] = self.table_files[i]
+
+
+    def play(self, delay, order):
         self.music = [f for f in self.table_music]
         print self.music
         while True:
             filenote = random.choice(self.music)
             note = filenote.split('.')[0]
             path = os.path.join(self.music_path, filenote)
-            Popen('mpg123 %s' %path, shell=True)
-            Popen("notify-send %s" %note, shell=True)
-            time.sleep(10)
+            if order == 1:
+                Popen("notify-send %s" %note, shell=True)
+                time.sleep(5)
+                Popen('mpg123 %s' %path, shell=True)
+            elif order == 0:
+                Popen('mpg123 %s' %path, shell=True)
+                time.sleep(5)
+                Popen("notify-send %s" %note, shell=True)
+            else:
+                break
+            time.sleep(delay)
 
 if __name__ == "__main__":
     p = Player()
-    p.test1()
-    p.play()
+    p.test4()
+    p.play(60*2, 1)
